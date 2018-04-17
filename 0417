@@ -1,0 +1,65 @@
+import random
+import matplotlib.pyplot as plt
+f=[]
+for j in range(120):
+  f.append(int(40))
+t=[]
+for k in range(120):
+  t.append(int(0))
+i=0
+while i<10000:
+  n=random.randint(0,119)
+  m=random.randint(0,119)
+  a=random.randint(0,1)
+  t[n]+=1
+  t[m]+=1
+  if t[m]>30 or t[n]>30:
+    f[n]-=0
+    f[m]+=0
+  elif f[n]==0 and f[m]>=10:
+    if a%2==1:
+      f[m]-=10
+      f[n]+=10
+    else:
+      f[n]-=0
+      f[m]+=0
+  elif f[n]==0 and f[m]==0:
+    f[n]-=0
+    f[m]+=0
+    
+  else:
+    f[n]-=10
+    f[m]+=10
+  i+=1
+f.sort()
+#print f
+import numpy as np
+from matplotlib import pyplot as plt
+
+plt.hist(f, bins = [0,10,20,30,40,50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150,160,170,180,190,200])
+plt.show()
+
+from scipy import optimize
+def test_func(x,a):
+
+    return a*np.exp(-x/40)
+counting=[]
+for item in bins:
+    counting.append(f.count(item))
+print counting
+print bins    
+plt.plot(bins,counting)
+plt.show()
+
+params, params_covariance = optimize.curve_fit(test_func, bins, counting)
+
+print params
+
+bin=np.linspace(0,200, num=21)
+    
+plt.figure(figsize=(6, 4))
+plt.scatter(bins, counting, label='Data')
+plt.plot(bins,test_func(bin, params),label='Fitted function')
+plt.legend(loc='best')
+
+plt.show()
